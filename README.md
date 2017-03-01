@@ -19,21 +19,9 @@ cf push python-app
 
 Once the application is successfully staged and running on the platform, download the application droplet.
 
-Identify the application id guid
+Download the application droplet
 ```bash
-cf env python-app
-```
-> ```json
-{
- "VCAP_APPLICATION": {
-  "application_id": "3d5e4b38-47a5-4b65-8c73-186a2c60aeb9",
-  "application_name": "python-app"
-}
-```
-
-Download the application droplet (use the `application_id` guid from the step above)
-```bash
-cf curl v2/apps/3d5e4b38-47a5-4b65-8c73-186a2c60aeb9/droplet/download > python-app-droplet.tgz
+cf curl /v2/apps/`cf app python-app --guid`/droplet/download --output python-app-droplet.tgz
 ```
 
 This droplet now contains your source code, all application dependencies needed by your app, and the python runtime. You can now easily transport this `python-app-droplet.tgz` file to disconnected environments as one complete artifact and deploy your python application to Cloud Foundry in disconnected environments. Also transfer your source code and cloud foundry manifest file along with this artifact to the other environment.
@@ -47,34 +35,15 @@ cf login -a https://api.disconnected-environments.cf.io
 
 Deploy your original source code to this environment. The application will fail at the time of staging due to lack of app dependencies. This is okay and expected behavior. This should at-least register your application in Cloud Foundry with a name and associated metadata for parity.
 ```bash
-cf push python-app-disconnected-environment
+cf push python-app-sterile --no-start
 ```
 
-Retrieve the OAuth Web Token
+Upload your python application droplet to the disconnected environment. Either provide an absolute path for the droplet in the `-F` argument or change to directory so `python-app-droplet.tgz` artifact is in your present directory from where you issue the curl command.
 ```bash
-cf oauth-token
-```
-Response would be a bearer `web token` used later to upload the droplet.
-> `bearer eyJhbGciOiJSUzI1NiIs...`
-
-Retrieve the `application_id` guid of this app in the disconnected environment.
-```bash
-cf env python-app-disconnected-environment
-```
-> ```json
-{
- "VCAP_APPLICATION": {
-  "application_id": "56e4a698-e1ee-4fdc-a2f5-9ad76a17299a",
-  "application_name": "python-app-disconnected-environment"
-}
-```
-
-Upload your python application droplet to the disconnected environment. When uploading the droplet, use the `application_id` guid and `web token` from the steps above. Either provide an absolute path for the droplet in the `-F` argument or change to directory so `python-app-droplet.tgz` artifact is in your present directory from where you issue the curl command.
-```bash
-curl "https://api.disconnected-environments.cf.io/v2/apps/56e4a698-e1ee-4fdc-a2f5-9ad76a17299a/droplet/upload" \
+curl "https://api.disconnected-environments.cf.io/v2/apps/`cf app python-app-sterile --guid`/droplet/upload" \
         -F droplet=@"python-app-droplet.tgz" \
         -X PUT \
-        -H "Authorization: bearer eyJhbGciOiJSUzI1NiIs..."
+        -H "Authorization: `cf oauth-token`"
 ```
 
 Wait for a response that signifies a successful droplet upload job execution.
@@ -105,5 +74,5 @@ cf curl /v2/jobs/d780d827-e2c3-4bef-afdb-2b8e0cec2b26
 
 Restart the application in your disconnected environment and the it should run without any errors as it did in the environments which originally had access to external PyPi and Anaconda repositories.
 ```bash
-cf restart python-app-disconnected-environment
+cf start python-app-sterile
 ```
