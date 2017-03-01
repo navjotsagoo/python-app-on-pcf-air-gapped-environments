@@ -49,6 +49,9 @@ Response would be a bearer web token that you will use later to upload the dropl
 > `bearer eyJhbGciOiJSUzI1NiIs...`
 
 Retrieve the application id guid of this app in the `disconnected` environment.
+```bash
+cf env python-app-disconnected-environment
+```
 > ```json
 {
  "VCAP_APPLICATION": {
@@ -66,7 +69,7 @@ curl "https://api.disconnected-environments.cf.io/v2/apps/56e4a698-e1ee-4fdc-a2f
 ```
 
 Wait for a similar response that signifies a successful droplet upload.
-```json
+> ```json
 {
   "metadata": {
     "guid": "d780d827-e2c3-4bef-afdb-2b8e0cec2b26",
