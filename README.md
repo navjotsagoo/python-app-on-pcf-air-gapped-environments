@@ -4,12 +4,18 @@ If you are building a python application, you likely need access to PyPi and oth
 
 However, in many cases, the same python application needs to be deployed in air-gapped, disconnected cloud foundry environments that do not have access to external PyPi repositories. In such cases, use the following instructions to deploy your python application in disconnected environments.
 
+## PreReqs
+- cf CLI
+- curl CLI
+
+## Preparation on Unclassified Network with Internet Access
 Begin with deployment in the unclassified environment with internet access.
 Deploy python application in Cloud Foundry that has access to PyPi and anaconda repositories available from the internet.
 
 ```bash
 cf push python-app
 ```
+
 
 Once the application is successfully staged and running on the platform, download the application droplet.
 
@@ -32,6 +38,8 @@ cf curl v2/apps/3d5e4b38-47a5-4b65-8c73-186a2c60aeb9/droplet/download > python-a
 
 This droplet now contains your source code, all application dependencies needed by your app, and the python runtime. You can now easily transport this `python-app-droplet.tgz` file to disconnected environments as one complete artifact and deploy your python application to Cloud Foundry in disconnected environments. Also transfer your source code and cloud foundry manifest file along with this artifact to the other environment.
 
+
+## Deployment of Application in Disconnected Environment
 Login to the your target Cloud Foundry endpoint in the `disconnected` environment.
 ```bash
 cf login -a https://api.disconnected-environments.cf.io
@@ -46,7 +54,7 @@ Retrieve the OAuth Web Token
 ```bash
 cf oauth-token
 ```
-Response would be a bearer web token used later to upload the droplet.
+Response would be a bearer `web token` used later to upload the droplet.
 > `bearer eyJhbGciOiJSUzI1NiIs...`
 
 Retrieve the `application_id` guid of this app in the disconnected environment.
@@ -61,7 +69,7 @@ cf env python-app-disconnected-environment
 }
 ```
 
-Upload your python application droplet to the disconnected environment. When uploading the droplet, use the `application_id` guid and `web token` from the steps above. Make sure to either provide the absolute path in the `-F` argument for your droplet or change to directory so `python-app-droplet.tgz` artifact is in your local directory.
+Upload your python application droplet to the disconnected environment. When uploading the droplet, use the `application_id` guid and `web token` from the steps above. Either provide an absolute path for the the droplet in the `-F` argument or change to directory so `python-app-droplet.tgz` artifact is in your present directory from where you issue the curl command.
 ```bash
 curl "https://api.disconnected-environments.cf.io/v2/apps/56e4a698-e1ee-4fdc-a2f5-9ad76a17299a/droplet/upload" \
         -F droplet=@"python-app-droplet.tgz" \
