@@ -41,11 +41,11 @@ Deploy your original source code to this environment. The application will fail 
 cf push python-app-disconnected-environment
 ```
 
-Retrieve the OAuth token
+Retrieve the OAuth Web Token
 ```bash
 cf oauth-token
 ```
-Response would be a bearer JSON Web token that you will use later to upload the droplet.
+Response would be a bearer web token that you will use later to upload the droplet.
 > `bearer eyJhbGciOiJSUzI1NiIs...`
 
 Retrieve the application id guid of this app in the `disconnected` environment.
@@ -57,7 +57,7 @@ Retrieve the application id guid of this app in the `disconnected` environment.
 }
 ```
 
-Upload your python application droplet to the disconnected environment. When uploading the droplet, you use the application id guid and JSON Web token from the steps above in the url with the curl command. Make sure to either provide the absolute path in the `-F` argument for your droplet or change directory so `python-app-droplet.tgz` in your local directory.
+Upload your python application droplet to the disconnected environment. When uploading the droplet, you use the application id guid and JSON Web token from the steps above in the url with the curl command. Make sure to either provide the absolute path in the `-F` argument for your droplet or change directory so `python-app-droplet.tgz` is in your local directory.
 ```bash
 curl "https://api.disconnected-environments.cf.io/v2/apps/56e4a698-e1ee-4fdc-a2f5-9ad76a17299a/droplet/upload" \
         -F droplet=@"python-app-droplet.tgz" \
