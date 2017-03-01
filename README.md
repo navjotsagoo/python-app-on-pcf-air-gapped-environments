@@ -19,7 +19,7 @@ cf env python-app
 > ```json
 {
  "VCAP_APPLICATION": {
-  "application_id": "**3d5e4b38-47a5-4b65-8c73-186a2c60aeb9**",
+  "application_id": "3d5e4b38-47a5-4b65-8c73-186a2c60aeb9",
   "application_name": "python-app"
 }
 ```
@@ -57,7 +57,7 @@ Retrieve the application id guid of this app in the `disconnected` environment.
 }
 ```
 
-Upload your python application droplet to the disconnected environment. When uploading the droplet, you use the application id guid and JSON Web token from the steps above in the url with the curl command.
+Upload your python application droplet to the disconnected environment. When uploading the droplet, you use the application id guid and JSON Web token from the steps above in the url with the curl command. Make sure to either provide the absolute path in the `-F` argument for your droplet or change directory so `python-app-droplet.tgz` in your local directory.
 ```bash
 curl "https://api.disconnected-environments.cf.io/v2/apps/56e4a698-e1ee-4fdc-a2f5-9ad76a17299a/droplet/upload" \
         -F droplet=@"python-app-droplet.tgz" \
