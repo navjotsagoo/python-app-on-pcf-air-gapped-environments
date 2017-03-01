@@ -65,6 +65,32 @@ curl "https://api.disconnected-environments.cf.io/v2/apps/56e4a698-e1ee-4fdc-a2f
         -H "Authorization: bearer eyJhbGciOiJSUzI1NiIs..."
 ```
 
+Wait for a similar response that signifies a successful droplet upload.
+```json
+{
+  "metadata": {
+    "guid": "d780d827-e2c3-4bef-afdb-2b8e0cec2b26",
+    "created_at": "2017-02-28T22:33:51Z",
+    "url": "/v2/jobs/d780d827-e2c3-4bef-afdb-2b8e0cec2b26"
+  },
+  "entity": {
+    "guid": "d780d827-e2c3-4bef-afdb-2b8e0cec2b26",
+    "status": "queued"
+  }
+}
+```
+
+Make sure that the upload droplet job has completed before proceeding further. Use the `url` key from the step above to confirm that the `status` has changed to `finished`
+```bash
+cf curl /v2/jobs/d780d827-e2c3-4bef-afdb-2b8e0cec2b26
+```
+> ```json
+"entity": {
+      "guid": "0",
+      "status": "finished"
+   }
+```
+
 Restart the application in your disconnected environment and the application should run without any errors as it did in the environments which originally had access to external PyPi repositories.
 ```bash
 cf restart python-app-disconnected-environment
