@@ -19,7 +19,7 @@ cf env python-app
 > ```json
 {
  "VCAP_APPLICATION": {
-  "application_id": "3d5e4b38-47a5-4b65-8c73-186a2c60aeb9",
+  "application_id": "**3d5e4b38-47a5-4b65-8c73-186a2c60aeb9**",
   "application_name": "python-app"
 }
 ```
