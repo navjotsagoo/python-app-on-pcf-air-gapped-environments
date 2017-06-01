@@ -65,7 +65,7 @@ Make sure that the upload droplet job has completed before proceeding further. U
 ```bash
 cf curl /v2/jobs/d780d827-e2c3-4bef-afdb-2b8e0cec2b26
 ```
-> ```json
+```json
 "entity": {
       "guid": "0",
       "status": "finished"
