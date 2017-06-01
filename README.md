@@ -47,7 +47,7 @@ curl "https://api.disconnected-environments.cf.io/v2/apps/`cf app python-app-ste
 ```
 
 Wait for a response that signifies a successful droplet upload job execution.
-> ```json
+```json
 {
   "metadata": {
     "guid": "d780d827-e2c3-4bef-afdb-2b8e0cec2b26",
